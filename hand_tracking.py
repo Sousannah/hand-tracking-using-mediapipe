@@ -19,9 +19,11 @@ while True:
 
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
+            lmList = []
             for id, lm in enumerate(handLms.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
+                lmList.append((id, cx, cy))
                 print(id, cx, cy)
                 if id == 4 :
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
@@ -33,6 +35,17 @@ while True:
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
                 if id == 20 :
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+
+                if len(lmList) >= 9:
+                    # Get position of thumb and index tip
+                    thumb_tip = lmList[4][1:3]
+                    index_tip = lmList[8][1:3]
+                    # Calculate thumb and index distance by Euclid Distance
+                    distance = ((thumb_tip[0] - index_tip[0]) ** 2 + (thumb_tip[1] - index_tip[1]) ** 2) ** 0.5
+                    # If thumb and index close by then it's "OK" gesture
+                    if distance < 40:
+                        cv2.putText(img, "OK gesture!", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 4)
+
 
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
 
