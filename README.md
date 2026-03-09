@@ -18,8 +18,10 @@ Before running the script, ensure you have the following installed:
 You can install the required packages using pip:
 
 ```
-pip install opencv-python mediapipe
+pip install opencv-python mediapipe==0.10.18
 ```
+Note: Newer versions of mediapipe may cause errors with this project.
+
 
 ## Usage
 
